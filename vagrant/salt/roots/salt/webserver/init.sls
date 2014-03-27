@@ -11,36 +11,70 @@ nginx:
       - pkgrepo: nginx
   service:
     - running
-    - watch:
-      - pkg: nginx
-      - file.managed: /etc/nginx/conf.d/*
 
 /var/log/nginx:
-    file.directory:
-        - user: www-data
-        - group: www-data
-        - mode: 775
-        - makedirs: True
+  file.directory:
+    - user: www-data
+    - group: www-data
+    - mode: 775
+    - makedirs: True
+
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://webserver/nginx.jinja2
+    - user: www-data
+    - group: www-data
+    - mode: 755
+    - require:
+      - pkg: nginx
+
+{% for site in conf['sites']%}
+  {% if site['ssl'] %}
 
 /etc/nginx/ssl:
-    file.directory:
-        - user: www-data
-        - group: www-data
-        - mode: 755
-        - makedirs: True
+  file.directory:
+    - user: www-data
+    - group: www-data
+    - mode: 755
+    - makedirs: True
+    - require:
+      - pkg: nginx
 
-
-{% for app in conf['apps']%}
-
-/etc/nginx/conf.d/{{ app['app_name'] }}.conf:
+/etc/nginx/ssl/{{site['name']}}.cert:
   file.managed:
-    - source: salt://webserver/app.conf
+    - source: salt://webserver/cert.jinja2
+    - template: jinja
     - context:
-        app_name: {{ app['app_name'] }}
-        dns_name: {{ app['dns_name'] }}
-        uwsgi_pass: {{ app['uwsgi_pass'] }}
-        base_dir: {{ app['base_dir'] }}
-        ssl: {{ app['ssl'] }}
+        cert: {{ site['cert'] }}
+    - user: www-data
+    - group: www-data
+    - mode: 664
+    - require:
+      - file: /etc/nginx/ssl
+
+/etc/nginx/ssl/{{site['name']}}.key:
+  file.managed:
+    - source: salt://webserver/key.jinja2
+    - template: jinja
+    - context:
+        key: {{ site['key'] }}
+    - user: www-data
+    - group: www-data
+    - mode: 660
+    - require:
+      - file: /etc/nginx/ssl
+
+  {% endif %}
+
+/etc/nginx/conf.d/{{site['name']}}.conf:
+  file.managed:
+    - source: salt://webserver/app.jinja2
+    - context:
+        name: {{ site['name'] }}
+        dns_name: {{ site['dns_name'] }}
+        uwsgi_pass: {{ site['uwsgi_pass'] }}
+        base_dir: {{ site['base_dir'] }}
+        ssl: {{ site['ssl'] }}
     - template: jinja
     - makedirs: True
     - watch_in:
