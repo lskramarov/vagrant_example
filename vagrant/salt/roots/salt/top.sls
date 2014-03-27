@@ -1,6 +1,6 @@
 base:
   '*':
-#    - source
-    - webserver
+    - source
+#   - webserver
 #    - db
 #    - celery
