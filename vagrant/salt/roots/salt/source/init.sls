@@ -17,8 +17,6 @@ git:
     - user: root
     - group: root
     - mode: 600
-    - require:
-      - pkg: git
 
 clone repository:
   cmd:
@@ -29,5 +27,5 @@ clone repository:
               git clone {{ git['repository'] }} {{ git['base_path'] }}
     - require:
       - pkg: git
-      - ssh_known_hosts: {{ ssh['ssh_known_hosts'] }}
       - file.managed: /root/.ssh/id_rsa
+      - ssh_known_hosts: {{ ssh['ssh_known_hosts'] }}

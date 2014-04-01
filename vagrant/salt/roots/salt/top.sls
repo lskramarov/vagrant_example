@@ -1,6 +1,9 @@
 base:
   '*':
-    - source
+#   - source
 #   - webserver
+    - python
+
+
 #    - db
 #    - celery
