@@ -1,0 +1,5 @@
+[uwsgi]
+chdir = {{ base_dir }}
+env = {{ _env }}
+module = django.core.handlers.wsgi:WSGIHandler()
+socket = {{ _socket }}

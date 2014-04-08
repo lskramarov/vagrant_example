@@ -9,12 +9,21 @@
 
 nginx:
   sites:
-    [{'name': 'app_1', 'base_dir': '/srv/anyticket', 'uwsgi_pass': '127.0.0.1:8000',
-      'dns_name': 'dev_1.my-app.com', 'ssl': False, 'cert': '', 'key': ''},
+    [{name: 'app_1', base_dir: '/srv/anyticket', uwsgi_pass: '127.0.0.1:8000',
+      dns_name: 'dev_1.my-app.com', ssl: False, cert: '', key: ''},
 
-      {'name': 'app_2', 'base_dir': '/srv/anyticket', 'uwsgi_pass': '127.0.0.1:8001',
-      'dns_name': 'dev_2.my-app.com', 'ssl': False, 'cert': '', 'key': ''}]
-  srv_conf: {'worker_processes': '4'}
+     {name: 'app_2', base_dir: '/srv/anyticket', uwsgi_pass: '127.0.0.1:8001',
+      dns_name: 'dev_2.my-app.com', ssl: False, cert: '', key: ''}]
+  srv_conf: {worker_processes: 4}
+
+uwsgi:
+  sites:
+    [{name: 'app_1', base_dir: '/srv/anyticket/anyticket', socket: '127.0.0.1:40001',
+      env: 'DJANGO_SETTINGS_MODULE=anyticket.settings_personal'},
+
+     {name: 'app_2', base_dir: '/srv/anyticket/anyticket', socket: '127.0.0.1:40002',
+      env: 'DJANGO_SETTINGS_MODULE=anyticket.settings_corporate'}]
+  srv_conf: {other_prop: 4}
 
 ssh:
   ssh_known_hosts: kafti.net

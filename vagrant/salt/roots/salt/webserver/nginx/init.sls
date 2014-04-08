@@ -35,7 +35,7 @@ nginx:
     - require:
       - pkg: nginx
 
-{% for site in sites%}
+{% for site in sites %}
   {% if site['ssl'] %}
 
 /etc/nginx/ssl:
