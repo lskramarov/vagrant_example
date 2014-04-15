@@ -1,12 +1,18 @@
+{% set pip = pillar.get('pip', {}) %}
+
 python:
-  pkg:
-    - installed
+  pkg.installed:
     - names:
-      - python2.7-dev
+      - python-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - unixodbc-dev
       - python-pip
-  pip:
-    - installed
-    - names:
-      - Django==1.5.4
+  pip.installed:
+    - upgrade: True
+#  вместо req.pip можно перечислить пакеты
+#    - names:
+#      - Django==1.6.2
+    - requirements: {{ pip['requirements'] }}
     - require:
       - pkg: python

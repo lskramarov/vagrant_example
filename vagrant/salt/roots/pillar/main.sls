@@ -25,6 +25,9 @@ uwsgi:
       env: 'DJANGO_SETTINGS_MODULE=anyticket.settings_corporate'}]
   srv_conf: {other_prop: 4}
 
+pip:
+  requirements: '/srv/anyticket/anyticket/req.pip'
+
 ssh:
   ssh_known_hosts: kafti.net
   fingerprint: 2a:f2:ef:2d:b7:8f:d9:06:97:3d:d8:f0:41:80:02:ea

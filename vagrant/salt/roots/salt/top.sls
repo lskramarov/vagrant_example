@@ -2,8 +2,7 @@ base:
   '*':
 #   - source
 #   - webserver
-#    - python
-    - wsgiserver
-
-#    - db
+   - python
+#   - wsgiserver
+#    - database
 #    - celery
