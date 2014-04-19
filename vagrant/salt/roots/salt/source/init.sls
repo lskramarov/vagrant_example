@@ -18,13 +18,22 @@ git:
     - group: root
     - mode: 600
 
-clone repository:
-  cmd:
-    - run
-    - unless: test -d {{ git['base_path'] }}
-    - user: root
-    - name: >
-              git clone {{ git['repository'] }} {{ git['base_path'] }}
+#clone repository:
+#  cmd:
+#    - run
+#    - unless: test -d {{ git['base_path'] }}
+#    - user: root
+#    - name: >
+#              git clone {{ git['repository'] }} {{ git['base_path'] }}
+#    - require:
+#      - pkg: git
+#      - file.managed: /root/.ssh/id_rsa
+#      - ssh_known_hosts: {{ ssh['ssh_known_hosts'] }}
+
+{{ git['repository'] }}:
+  git.latest:
+    - rev: {{ git['branch'] }}
+    - target: {{ git['base_path'] }}
     - require:
       - pkg: git
       - file.managed: /root/.ssh/id_rsa

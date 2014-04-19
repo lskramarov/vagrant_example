@@ -63,3 +63,4 @@ ssh:
 git:
   repository: gitosis@kafti.net:anyticket.git
   base_path: /srv/anyticket
+  branch: master
